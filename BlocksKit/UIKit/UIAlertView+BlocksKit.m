@@ -120,6 +120,14 @@
 + (void) showAlertViewWithTitle: (NSString *) title message: (NSString *) message cancelButtonTitle: (NSString *) cancelButtonTitle otherButtonTitles: (NSArray *) otherButtonTitles handler: (void (^)(UIAlertView *, NSInteger)) block
 {
 	UIAlertView *alertView = [[self class] alertViewWithTitle: title message: message];
+    
+    // If no buttons were specified, cancel button becomes "Dismiss"
+	if (!cancelButtonTitle.length && !otherButtonTitles.count)
+		cancelButtonTitle = NSLocalizedString(@"Dismiss", nil);
+	
+	// Set cancel button
+	if (cancelButtonTitle.length)
+		alertView.cancelButtonIndex = [alertView addButtonWithTitle: cancelButtonTitle];
 	
 	// Set other buttons
 	if (otherButtonTitles.count)
@@ -133,13 +141,13 @@
 		}];
 	}
 	
-	// If no buttons were specified, cancel button becomes "Dismiss"
-	if (!cancelButtonTitle.length && !otherButtonTitles.count)
-		cancelButtonTitle = NSLocalizedString(@"Dismiss", nil);
-	
-	// Set cancel button
-	if (cancelButtonTitle.length)
-		alertView.cancelButtonIndex = [alertView addButtonWithTitle: cancelButtonTitle];
+//	// If no buttons were specified, cancel button becomes "Dismiss"
+//	if (!cancelButtonTitle.length && !otherButtonTitles.count)
+//		cancelButtonTitle = NSLocalizedString(@"Dismiss", nil);
+//	
+//	// Set cancel button
+//	if (cancelButtonTitle.length)
+//		alertView.cancelButtonIndex = [alertView addButtonWithTitle: cancelButtonTitle];
 
 	// Set `didDismissBlock`
 	if (block) alertView.didDismissBlock = block;
